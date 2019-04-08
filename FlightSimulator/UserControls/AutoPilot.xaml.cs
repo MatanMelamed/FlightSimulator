@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FlightSimulator.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,14 +16,17 @@ using System.Windows.Shapes;
 
 namespace FlightSimulator.UserControls
 {
-    /// <summary>
-    /// Interaction logic for AutoPilot.xaml
-    /// </summary>
+        /// <summary>
+        /// Interaction logic for AutoPilot.xaml
+        /// </summary>
     public partial class AutoPilot : UserControl
     {
+        AutoPilotViewModel apvm;
         public AutoPilot()
         {
             InitializeComponent();
+            apvm = new AutoPilotViewModel(this);
+            DataContext = apvm;
         }
     }
 }
