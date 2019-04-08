@@ -3,10 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FlightSimulator"
+        xmlns:local="clr-namespace:FlightSimulator.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" Height="50" Width="100"></Button>
+        <TabControl>
+            <TabItem Width="80" Height="40" Header="Manual">
+                <Button Content="Matan" Width="80" Height="40"></Button>
+            </TabItem>
+            <TabItem Width="80" Height="40" Header="Auto Pilot">
+                <local:AutoPilot></local:AutoPilot>
+            </TabItem>
+            
+        </TabControl>
+        
     </Grid>
 </Window>
