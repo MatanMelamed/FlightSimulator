@@ -25,7 +25,7 @@ namespace FlightSimulator.UserControls
         public AutoPilot()
         {
             InitializeComponent();
-            apvm = new AutoPilotViewModel(this);
+            apvm = new AutoPilotViewModel();
             DataContext = apvm;
         }
     }

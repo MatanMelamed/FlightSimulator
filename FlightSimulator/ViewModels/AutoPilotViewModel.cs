@@ -10,9 +10,8 @@ namespace FlightSimulator.ViewModels
     class AutoPilotViewModel
     {
         private AutoPilot autoPilot;
-        public AutoPilotViewModel(AutoPilot autoPilot)
+        public AutoPilotViewModel()
         {
-            this.autoPilot = autoPilot;
         }
     }
 }
