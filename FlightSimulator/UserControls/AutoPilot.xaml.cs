@@ -1,4 +1,5 @@
-﻿using FlightSimulator.ViewModels;
+﻿using FlightSimulator.Model;
+using FlightSimulator.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +22,12 @@ namespace FlightSimulator.UserControls
         /// </summary>
     public partial class AutoPilot : UserControl
     {
-        AutoPilotViewModel apvm;
+        AutoPilotViewModel _apvm;
         public AutoPilot()
         {
             InitializeComponent();
-            apvm = new AutoPilotViewModel();
-            DataContext = apvm;
+            _apvm = new AutoPilotViewModel(new AutoPilotModel());
+            DataContext = _apvm;
         }
     }
 }

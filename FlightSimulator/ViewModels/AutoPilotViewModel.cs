@@ -4,14 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FlightSimulator.Utils;
+using FlightSimulator.Model;
 
 namespace FlightSimulator.ViewModels
 {
-    class AutoPilotViewModel
+    class AutoPilotViewModel : INotifyPropertyChanged
     {
-        private AutoPilot autoPilot;
-        public AutoPilotViewModel()
+        private AutoPilotModel _apm;
+        public AutoPilotViewModel(AutoPilotModel apm)
         {
+            _apm = apm;
         }
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
