@@ -7,15 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TabControl>
-            <TabItem Width="80" Height="40" Header="Manual">
-                <Button Content="Matan" Width="80" Height="40"></Button>
-            </TabItem>
-            <TabItem Width="80" Height="40" Header="Auto Pilot">
-                <local:AutoPilot></local:AutoPilot>
-            </TabItem>
-            
-        </TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="1" >
+            <TabControl>
+                <TabItem Width="80" Height="40" Header="Manual">
+                    <Button Content="Matan" Width="80" Height="40"></Button>
+                </TabItem>
+                <TabItem Width="80" Height="40" Header="Auto Pilot">
+                    <local:AutoPilot></local:AutoPilot>
+                </TabItem>
+
+            </TabControl>
+        </DockPanel>
+        
         
     </Grid>
 </Window>
