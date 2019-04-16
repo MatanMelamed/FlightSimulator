@@ -17,7 +17,7 @@ namespace FlightSimulator
         private volatile bool _sending_status;
         public Client()
         {
-             _client = new TcpClient();
+            _client = new TcpClient();
             _client.Connect("127.0.0.1", 5402);
             _sending_status = false;
         }
