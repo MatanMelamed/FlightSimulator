@@ -4,11 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FlightSimulator.UserControls"
+             xmlns:vm ="clr-namespace:FlightSimulator.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="450">
+    <UserControl.Resources>
+        <vm:AutoPilotViewModel x:Key="AutoPilotViewModel"/>
+    </UserControl.Resources>
     <Grid>
-        <TextBox x:Name="txtCommands" Margin="0,0,0,80" TextWrapping="Wrap" AcceptsReturn="True"> </TextBox>
-        <Button x:Name="okBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="0,0,120,20"></Button>
-        <Button x:Name="clearBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="120,0,0,20"></Button>
+        <TextBox x:Name="txtCommands" Margin="0,0,0,80" TextWrapping="Wrap" AcceptsReturn="True" 
+                 Text="{Binding Path=Command_Text,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                 Background="{Binding Commands_Background,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold"> </TextBox>
+        <Button x:Name="okBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="0,0,120,20" Content="OK"
+                Command="{Binding SendCommands}"></Button>
+        <Button x:Name="clearBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="120,0,0,20" Content="Clear"
+              Command="{Binding ClearCommand}" ></Button>
     </Grid>
 </UserControl>
