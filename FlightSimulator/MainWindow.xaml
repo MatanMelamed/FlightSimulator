@@ -15,7 +15,7 @@
         <DockPanel Grid.Column="1" >
             <TabControl>
                 <TabItem Width="80" Height="40" Header="Manual">
-                    <Button Content="Matan" Width="80" Height="40"></Button>
+                    <local:ManualControler />
                 </TabItem>
                 <TabItem Width="80" Height="40" Header="Auto Pilot">
                     <local:AutoPilot>

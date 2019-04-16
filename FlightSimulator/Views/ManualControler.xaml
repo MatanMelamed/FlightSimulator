@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="FlightSimulator.UserControls.ManualControler"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:parts="clr-namespace:FlightSimulator.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="550"
+             Height="450" Width="550">
+
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="← throttle →" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Margin="-39,125,15,154" Grid.Row="2" >
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+
+        <Slider x:Name="throttle_slider" Orientation="Vertical" TickPlacement="BottomRight" Grid.Column="1" Grid.Row="2" Minimum="-1" Maximum="1" TickFrequency="0.1" Height="300" Margin="20,0,10,0"/>
+
+        <TextBlock x:Name="throttle_indicator" Grid.Row="1" Grid.Column="2" Text="0" Margin="5"/>
+
+        <TextBlock Text="← aileron →" Grid.ColumnSpan="6"/>
+
+        <parts:Joystick Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+
+        <Slider x:Name="rudder_slider" Grid.Row="3" Grid.Column="3" TickPlacement="BottomRight" Minimum="-1" Maximum="1" TickFrequency="0.1" Margin="0,20,0,0" Width="300"/>
+
+        <TextBlock Text="← rudder →" Grid.Row="4" Grid.ColumnSpan="6"/>
+
+        <TextBlock x:Name="rudder_indicator" Grid.Row="3" Grid.Column="4" Text="0"/>
+
+        <TextBlock x:Name="aileron_indicator" Grid.Column="4" Text="0.0"/>
+
+        <TextBlock x:Name="elevator_indicator" Grid.Row="1" Grid.Column="5" Text="0.0" RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+
+        <TextBlock Grid.Column="3" Text="← elevator →" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="3" Margin="302,126,-41,159" Grid.Row="2" >
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="90"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+
+
+
+    </Grid>
+</UserControl>
