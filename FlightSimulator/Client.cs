@@ -20,7 +20,7 @@ namespace FlightSimulator
             _client = new TcpClient();
             //TimeSpan interval = new TimeSpan(0, 0, 60);
             //Thread.Sleep(interval);
-           // _client.Connect("127.0.0.1", 5402);
+           _client.Connect("127.0.0.1", 5402);
             _sending_status = false;
         }
         public void Start()

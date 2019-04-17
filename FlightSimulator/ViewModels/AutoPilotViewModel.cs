@@ -15,14 +15,12 @@ namespace FlightSimulator.ViewModels
     class AutoPilotViewModel : INotifyPropertyChanged
     {
         private AutoPilotModel _apm;
-        private string _command_text;
         private Brush _command_background;
         public CommandHandler _clearCommand;
         public CommandHandler _sendCommands;
         private Client _client;
         public AutoPilotViewModel()
         { 
-            _command_text = "";
             _apm = new AutoPilotModel();
             _client = new Client();
         }
@@ -50,11 +48,12 @@ namespace FlightSimulator.ViewModels
         {
             get
             {
-                return _command_text;
+                return _apm.Command_Text;
             }
             set
             {
-                _command_text = value; OnPropertyChanged(_command_text);
+                _apm.Command_Text = value;
+                OnPropertyChanged("Text Changed");
             }
         }
 
@@ -70,19 +69,20 @@ namespace FlightSimulator.ViewModels
                 OnPropertyChanged("");
             }
         }
-        
+
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public void Clear_Commands()
         {
-            Command_Text = "";
+            _apm.ClearCommands();
+            OnPropertyChanged("");
         }
 
         public void Send_Commands()
         {
-            string[] commands = _command_text.Split('\n');
+            string[] commands = _apm.Command_Text.Split('\n');
             _client.SetCommands(commands);
             Thread sendCommandThread = new Thread(_client.Start);
             sendCommandThread.Start();
