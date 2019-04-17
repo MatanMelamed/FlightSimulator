@@ -4,22 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightSimulator.UserControls"
+        xmlns:views ="clr-namespace:FlightSimulator.Views"
         xmlns:vm ="clr-namespace:FlightSimulator.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1150"
+        >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <views:FlightBoard></views:FlightBoard>
+        </DockPanel>
         <DockPanel Grid.Column="1" >
             <TabControl>
                 <TabItem Width="80" Height="40" Header="Manual">
-                    <local:ManualControler />
+                    <local:ManualControler/>
                 </TabItem>
                 <TabItem Width="80" Height="40" Header="Auto Pilot">
-                    <local:AutoPilot>
-                    </local:AutoPilot>
+                    <local:AutoPilot/>
                 </TabItem>
 
             </TabControl>
