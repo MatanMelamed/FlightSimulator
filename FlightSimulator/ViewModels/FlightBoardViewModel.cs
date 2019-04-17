@@ -39,6 +39,7 @@ namespace FlightSimulator.ViewModels
         }
         public void ShowSettings()
         {
+            settingsView = new SettingsView();
             settingsView.Show();
         }
     }

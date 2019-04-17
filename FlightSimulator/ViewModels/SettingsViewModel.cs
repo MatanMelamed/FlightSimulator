@@ -77,7 +77,6 @@ namespace FlightSimulator.ViewModels
         public void ReloadSettings()
         {
             _asm.ReloadSettings();
-
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
