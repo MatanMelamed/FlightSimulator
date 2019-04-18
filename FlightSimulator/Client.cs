@@ -29,6 +29,8 @@ namespace FlightSimulator
                 if(m_Instance == null)
                 {
                     m_Instance = new Client();
+                    m_Instance._ip = Properties.Settings.Default.FlightServerIP;
+                    m_Instance._port = Properties.Settings.Default.FlightCommandPort;
                     //TimeSpan interval = new TimeSpan(0, 0, 60);
                     //Thread.Sleep(interval);
                     //_client.Connect("127.0.0.1", 5402);
@@ -43,8 +45,8 @@ namespace FlightSimulator
         {
             _client = new TcpClient();
             _client.Connect(_ip,_port);
+            Console.WriteLine("Sending in ip: " + _ip + " on port: " + _port);
         }
-
         //sending commands to the simulator
         public void Send()
         {

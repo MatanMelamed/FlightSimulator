@@ -49,7 +49,6 @@ namespace FlightSimulator.Model
                 NotifyPropertyChanged("Background_Changed");
             }
         }
-
         //send the commands to the simulator
         public void Send_Commands()
         {

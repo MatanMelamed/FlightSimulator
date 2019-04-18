@@ -64,14 +64,12 @@ namespace FlightSimulator.ViewModels
         public void ConnectSimulator()
         {
             //connect server
-            server = new Server();
+            server = Server.Instance;
             Thread openServerThread = new Thread(server.Start);
             openServerThread.Start();
 
             client = Client.Instance;
-            client.Set_IP_Port("127.0.0.1", 5402);
             Thread connectClient = new Thread(client.Start);
-
             //wait server has a connection
             while (!server.HasConnection());
 

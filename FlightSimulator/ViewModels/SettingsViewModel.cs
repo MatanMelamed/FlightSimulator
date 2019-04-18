@@ -14,10 +14,14 @@ namespace FlightSimulator.ViewModels
         private ApplicationSettingsModel _asm;
         public CommandHandler _saveSettings;
         public CommandHandler _reloadSettings;
+        public Server server;
         public Client client;
+
         public SettingsViewModel()
         {
             _asm = new ApplicationSettingsModel();
+            server = Server.Instance;
+            client = Client.Instance;
         }
         //Properties
 
@@ -83,6 +87,9 @@ namespace FlightSimulator.ViewModels
         public void SaveSettings()
         {
             _asm.SaveSettings();
+            server.Set_IP_Port(FlightServerIP, FlightInfoPort);
+            client.Set_IP_Port(FlightServerIP, FlightCommandPort);
+
             
         }
         //not saving the settings
@@ -97,6 +104,5 @@ namespace FlightSimulator.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

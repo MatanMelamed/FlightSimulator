@@ -12,20 +12,37 @@ namespace FlightSimulator
 {
     public class Server
     {
+        #region Singletone
+        private static Server m_Instance = null;
         private TcpListener server;
         private bool hasConnected;
-        public Server()
+        private IPAddress _ip;
+        private int _port;
+        public static Server Instance
         {
-            IPAddress IP = IPAddress.Parse("127.0.0.1");
-            server = new TcpListener(IP, 5400);
-            Console.WriteLine("Listening");
-            hasConnected = false;
+            get
+            {
+                if (m_Instance == null)
+                {
+                    m_Instance = new Server();
+                    m_Instance._ip = IPAddress.Parse(Properties.Settings.Default.FlightServerIP);
+                    m_Instance._port = Properties.Settings.Default.FlightInfoPort;
+                }
+                return m_Instance;
+                /*IPAddress IP = IPAddress.Parse("127.0.0.1");
+                server = new TcpListener(IP, 5400);
+                Console.WriteLine("Listening");
+                hasConnected = false;*/
+            }
             /*Thread tcpListenerThread = new Thread(Start);
             tcpListenerThread.IsBackground = true;
             tcpListenerThread.Start();*/
         }
+    #endregion
         public void Start()
         {
+            server = new TcpListener(_ip, _port);
+            Console.WriteLine("Listening with ip: " + _ip.ToString() +" on port: " +_port);
             server.Start();
 
             //wait till we have a connection
@@ -56,6 +73,11 @@ namespace FlightSimulator
         public bool HasConnection()
         {
             return hasConnected;
+        }
+        public void Set_IP_Port(string ip,int port)
+        {
+            _ip = IPAddress.Parse(ip);
+            _port = port;
         }
     }
 }   
