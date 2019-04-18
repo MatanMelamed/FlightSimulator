@@ -16,8 +16,8 @@
             <RowDefinition Height="280*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="txtCommands" Margin="0,0,-0.4,79.6" TextWrapping="Wrap" AcceptsReturn="True" 
-                 Text="{Binding Command_Text}"
-                 Background="{Binding Commands_Background,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Grid.RowSpan="2"></TextBox>
+                 Text="{Binding VM_Text_Changed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Background="{Binding VM_Background_Changed,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontWeight="Bold" Grid.RowSpan="2"></TextBox>
         <Button x:Name="okBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="125,0,244.6,19.6" Content="OK"
                 Command="{Binding SendCommands}" Grid.Row="1"></Button>
         <Button x:Name="clearBtn" VerticalAlignment="Bottom" Width="80" Height="50" Margin="245,0,124.6,19.6" Content="Clear"

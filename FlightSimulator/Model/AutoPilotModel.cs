@@ -6,27 +6,23 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Media;
 using System.Threading;
+using FlightSimulator.ViewModels;
 
 namespace FlightSimulator.Model
 {
-    public class AutoPilotModel : INotifyPropertyChanged
+    public class AutoPilotModel : ModelNotify
     {
         string _command_text;
-        Brush _command_background;
+        volatile Brush _command_background;
+        volatile Client _client;
         public AutoPilotModel()
         {
-            _command_text = "";
+            _client = new Client();
         }
-        public event PropertyChangedEventHandler PropertyChanged;
+        //Properties
 
-       
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public string Command_Text
+        //TextBox text property
+        public string Text_Changed
         {
             get
             {
@@ -35,11 +31,12 @@ namespace FlightSimulator.Model
             set
             {
                 _command_text =value;
-                OnPropertyChanged("Text Changed");
+                //notify change
+                NotifyPropertyChanged("Text_Changed");
             }
         }
-
-        public Brush Commands_Background
+        //TextBox background property
+        public Brush Background_Changed
         {
             get
             {
@@ -48,14 +45,29 @@ namespace FlightSimulator.Model
             set
             {
                 _command_background = value;
-                OnPropertyChanged("");
+                //notify change
+                NotifyPropertyChanged("Background_Changed");
             }
         }
-        public void ClearCommands()
-        {
-            Command_Text = "";
-            OnPropertyChanged("Text Changed");
-        }
 
+        //send the commands to the simulator
+        public void Send_Commands()
+        {
+            Background_Changed = Brushes.Pink;
+            //split the textbox to a list of commands
+            string[] commands = Text_Changed.Split('\n');
+
+            //set the commands to the client
+            _client.SetCommands(commands);
+            //Thread sendCommandThread = new Thread(_client.Send);
+            //sending the commands on a differrent thread
+            //sendCommandThread.Start();
+            _client.Send();
+
+            //changing the background of textbox by another thread
+
+            Background_Changed = Brushes.Transparent;
+
+        }
     }
 }

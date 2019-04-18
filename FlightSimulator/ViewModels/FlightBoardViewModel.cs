@@ -15,7 +15,10 @@ namespace FlightSimulator.ViewModels
     public class FlightBoardViewModel : BaseNotify
     {
         private CommandHandler _openSettings;
+        private CommandHandler _connectSimulator;
         private SettingsView settingsView;
+        public volatile Server server;
+        public volatile Client client;
         public FlightBoardViewModel()
         {
             settingsView = new SettingsView();
@@ -30,6 +33,8 @@ namespace FlightSimulator.ViewModels
         {
             get;
         }
+
+        //open setting command
         public CommandHandler OpenSettingsCommand
         {
             get
@@ -37,10 +42,43 @@ namespace FlightSimulator.ViewModels
                 return _openSettings ?? (_openSettings = new CommandHandler(() => ShowSettings()));
             }
         }
+
+        //showing the setting window
         public void ShowSettings()
         {
             settingsView = new SettingsView();
             settingsView.Show();
+        }
+
+        //command to connect the program to the simulator
+        public CommandHandler ConnectCommnad
+        {
+            get
+            {
+                return _connectSimulator ?? (_connectSimulator = new CommandHandler(() => ConnectSimulator()));
+            }
+        }
+
+        //connect simulator by Server-Client methodology
+        public void ConnectSimulator()
+        {
+            //connect server
+            server = new Server();
+            Thread openServerThread = new Thread(server.Start);
+            openServerThread.Start();
+
+            client = new Client();
+            Thread connectClient = new Thread(client.Start);
+
+            //wait server has a connection
+            while (!server.HasConnection());
+
+            //connect client
+            connectClient.Start();
+
+            //send
+            Thread clientSend = new Thread(client.Send);
+            clientSend.Start();
         }
     }
 }

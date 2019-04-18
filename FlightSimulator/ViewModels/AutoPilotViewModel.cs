@@ -12,20 +12,21 @@ using System.Threading;
 
 namespace FlightSimulator.ViewModels
 {
-    class AutoPilotViewModel : INotifyPropertyChanged
+    class AutoPilotViewModel : BaseNotify
     {
         private AutoPilotModel _apm;
-        private Brush _command_background;
         public CommandHandler _clearCommand;
         public CommandHandler _sendCommands;
-        private Client _client;
         public AutoPilotViewModel()
         { 
             _apm = new AutoPilotModel();
-            _client = new Client();
+            _apm.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
+            {
+                NotifyPropertyChanged("VM_" + e.PropertyName);
+            };
         }
-        public event PropertyChangedEventHandler PropertyChanged;
 
+        //Command to clear textbox
         public CommandHandler ClearCommand
         {
             get
@@ -34,6 +35,8 @@ namespace FlightSimulator.ViewModels
                 Clear_Commands()));
             }
         }
+
+        //Command to send commands to the simulator
         public CommandHandler SendCommands
         {
             get
@@ -44,59 +47,47 @@ namespace FlightSimulator.ViewModels
         }
 
         //Properties
-        public string Command_Text
+
+        //TextBox text property
+        public string VM_Text_Changed
         {
             get
             {
-                return _apm.Command_Text;
+                return _apm.Text_Changed;
             }
             set
             {
-                _apm.Command_Text = value;
-                OnPropertyChanged("Text Changed");
+                _apm.Text_Changed = value;
+                //notify change
+                NotifyPropertyChanged("VM_Text_Changed");
             }
         }
-
-        public Brush Commands_Background
+        //TextBox background property
+        public Brush VM_Background_Changed
         {
             get
             {
-                return _command_background;
+                return _apm.Background_Changed;
             }
             set
             {
-                _command_background = value;
-                OnPropertyChanged("");
+                _apm.Background_Changed = value;
+                //notify change
+                NotifyPropertyChanged("VM_Background_Changed");
             }
-        }
-
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public void Clear_Commands()
         {
-            _apm.ClearCommands();
-            OnPropertyChanged("");
+            VM_Text_Changed = "";
         }
 
+        //send the commands to the simulator
         public void Send_Commands()
         {
-            string[] commands = _apm.Command_Text.Split('\n');
-            _client.SetCommands(commands);
-            Thread sendCommandThread = new Thread(_client.Start);
-            sendCommandThread.Start();
-            Thread ChangeBackgrounThread = new Thread(ChangeBackground);
-            ChangeBackgrounThread.Start();
+            Thread sendCommnads= new Thread(_apm.Send_Commands);
+            sendCommnads.Start();
 
         }
-        public void ChangeBackground()
-        {
-            Commands_Background = Brushes.Pink;
-            while (_client.Is_Sending()) { }
-            Commands_Background = Brushes.Transparent;
-        }
-
     }
 }
 

@@ -35,7 +35,8 @@
         <d3:ChartPlotter Grid.Row="0" Grid.Column="1" LegendVisible="False" Name="plotter" Margin="0,60,20,0">
         </d3:ChartPlotter>
         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center">Lat</TextBlock>
-        <Button Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,200,0" Grid.Column="1">Connect</Button>
+        <Button Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,200,0" Grid.Column="1"
+                Command="{Binding ConnectCommnad}">Connect</Button>
         <Button Height="40" Width="80" VerticalAlignment="Top" Margin="200,10,0,0" Grid.Column="1" 
                 Command="{Binding OpenSettingsCommand}">Settings</Button>
     </Grid>
