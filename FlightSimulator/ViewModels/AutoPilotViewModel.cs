@@ -76,12 +76,13 @@ namespace FlightSimulator.ViewModels
                 NotifyPropertyChanged("VM_Background_Changed");
             }
         }
+        //clear textbox
         public void Clear_Commands()
         {
             VM_Text_Changed = "";
         }
 
-        //send the commands to the simulator
+        //send the commands to the simulator in other thread
         public void Send_Commands()
         {
             Thread sendCommnads= new Thread(_apm.Send_Commands);

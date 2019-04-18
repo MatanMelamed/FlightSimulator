@@ -53,19 +53,18 @@ namespace FlightSimulator.Model
         //send the commands to the simulator
         public void Send_Commands()
         {
+            //change the backround to a busy color - Pink
             Background_Changed = Brushes.Pink;
             //split the textbox to a list of commands
             string[] commands = Text_Changed.Split('\n');
 
             //set the commands to the client
             _client.SetCommands(commands);
-            //Thread sendCommandThread = new Thread(_client.Send);
-            //sending the commands on a differrent thread
-            //sendCommandThread.Start();
+
+            //send commnads to the simulator
             _client.Send();
 
-            //changing the background of textbox by another thread
-
+            //changing the background back to transparent
             Background_Changed = Brushes.Transparent;
 
         }
