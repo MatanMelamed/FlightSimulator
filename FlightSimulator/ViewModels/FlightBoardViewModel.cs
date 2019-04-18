@@ -46,6 +46,7 @@ namespace FlightSimulator.ViewModels
         //showing the setting window
         public void ShowSettings()
         {
+            settingsView.Close();
             settingsView = new SettingsView();
             settingsView.Show();
         }

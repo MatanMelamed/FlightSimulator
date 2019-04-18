@@ -20,6 +20,7 @@ namespace FlightSimulator.ViewModels
         public AutoPilotViewModel()
         { 
             _apm = new AutoPilotModel();
+            //Notify the fit property in the view model
             _apm.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
             {
                 NotifyPropertyChanged("VM_" + e.PropertyName);
