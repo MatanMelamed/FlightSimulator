@@ -14,6 +14,7 @@ namespace FlightSimulator.ViewModels
         private ApplicationSettingsModel _asm;
         public CommandHandler _saveSettings;
         public CommandHandler _reloadSettings;
+        public Client client;
         public SettingsViewModel()
         {
             _asm = new ApplicationSettingsModel();

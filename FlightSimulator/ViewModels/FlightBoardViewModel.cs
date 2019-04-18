@@ -68,7 +68,7 @@ namespace FlightSimulator.ViewModels
             Thread openServerThread = new Thread(server.Start);
             openServerThread.Start();
 
-            client = new Client();
+            client = Client.Instance;
             Thread connectClient = new Thread(client.Start);
 
             //wait server has a connection
@@ -76,10 +76,11 @@ namespace FlightSimulator.ViewModels
 
             //connect client
             connectClient.Start();
-
+            /*
             //send
             Thread clientSend = new Thread(client.Send);
             clientSend.Start();
+            */
         }
     }
 }

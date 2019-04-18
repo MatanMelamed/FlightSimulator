@@ -14,10 +14,10 @@ namespace FlightSimulator.Model
     {
         string _command_text;
         volatile Brush _command_background;
-        volatile Client _client;
+        Client _client;
         public AutoPilotModel()
         {
-            _client = new Client();
+                _client = Client.Instance;
         }
         //Properties
 
@@ -53,6 +53,7 @@ namespace FlightSimulator.Model
         //send the commands to the simulator
         public void Send_Commands()
         {
+           
             //change the backround to a busy color - Pink
             Background_Changed = Brushes.Pink;
             //split the textbox to a list of commands

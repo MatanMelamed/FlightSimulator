@@ -12,24 +12,35 @@ namespace FlightSimulator
 {
     public class Client
     {
+        
+        #region Singletone
+        private static Client m_Instance = null;
         private TcpClient _client;
         private string[] _commands;
         private volatile bool _sending_status;
 
         //constructor
-        public Client()
+        public static Client Instance 
         {
-            _client = new TcpClient();
-            //TimeSpan interval = new TimeSpan(0, 0, 60);
-            //Thread.Sleep(interval);
-            //_client.Connect("127.0.0.1", 5402);
-            _sending_status = false;
+            get
+            {
+                if(m_Instance == null)
+                {
+                    m_Instance = new Client();
+                    //TimeSpan interval = new TimeSpan(0, 0, 60);
+                    //Thread.Sleep(interval);
+                    //_client.Connect("127.0.0.1", 5402);
+                }
+                return m_Instance;
+            }
+            
         }
-
+        #endregion
         //connect client
         public void Start()
         {
-            //_client.Connect("127.0.0.1", 5402);
+            _client = new TcpClient();
+            _client.Connect("127.0.0.1", 5402);
         }
 
         //sending commands to the simulator
