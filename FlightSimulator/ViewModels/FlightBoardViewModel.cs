@@ -69,6 +69,7 @@ namespace FlightSimulator.ViewModels
             openServerThread.Start();
 
             client = Client.Instance;
+            client.Set_IP_Port("127.0.0.1", 5402);
             Thread connectClient = new Thread(client.Start);
 
             //wait server has a connection
@@ -76,11 +77,6 @@ namespace FlightSimulator.ViewModels
 
             //connect client
             connectClient.Start();
-            /*
-            //send
-            Thread clientSend = new Thread(client.Send);
-            clientSend.Start();
-            */
         }
     }
 }

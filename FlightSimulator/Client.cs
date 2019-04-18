@@ -15,6 +15,8 @@ namespace FlightSimulator
         
         #region Singletone
         private static Client m_Instance = null;
+        private string _ip;
+        private int _port;
         private TcpClient _client;
         private string[] _commands;
         private volatile bool _sending_status;
@@ -40,7 +42,7 @@ namespace FlightSimulator
         public void Start()
         {
             _client = new TcpClient();
-            _client.Connect("127.0.0.1", 5402);
+            _client.Connect(_ip,_port);
         }
 
         //sending commands to the simulator
@@ -95,6 +97,11 @@ namespace FlightSimulator
         public bool Is_Sending()
         {
             return _sending_status;
+        }
+        public void Set_IP_Port(string ip,int port)
+        {
+            _ip = ip;
+            _port = port;
         }
     }
 }
