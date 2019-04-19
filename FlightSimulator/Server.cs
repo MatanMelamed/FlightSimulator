@@ -86,10 +86,6 @@ namespace FlightSimulator
             _port = port;
         }
 
-        public void Stop()
-        {
-            server.Stop();
-        }
 
     }
 }
