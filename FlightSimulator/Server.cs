@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FlightSimulator.Model;
+using FlightSimulator.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -18,6 +20,7 @@ namespace FlightSimulator
         private bool hasConnected;
         private IPAddress _ip;
         private int _port;
+        private FlightBoardViewModel _fbvm;
         public static Server Instance
         {
             get
@@ -27,22 +30,18 @@ namespace FlightSimulator
                     m_Instance = new Server();
                     m_Instance._ip = IPAddress.Parse(Properties.Settings.Default.FlightServerIP);
                     m_Instance._port = Properties.Settings.Default.FlightInfoPort;
+                    m_Instance._fbvm = FlightBoardViewModel.Instance;
                 }
                 return m_Instance;
-                /*IPAddress IP = IPAddress.Parse("127.0.0.1");
-                server = new TcpListener(IP, 5400);
-                Console.WriteLine("Listening");
-                hasConnected = false;*/
             }
-            /*Thread tcpListenerThread = new Thread(Start);
-            tcpListenerThread.IsBackground = true;
-            tcpListenerThread.Start();*/
         }
-    #endregion
+        #endregion
+        //start recieving data
         public void Start()
         {
+            //connect to the simulator
             server = new TcpListener(_ip, _port);
-            Console.WriteLine("Listening with ip: " + _ip.ToString() +" on port: " +_port);
+            Console.WriteLine("Listening with ip: " + _ip.ToString() + " on port: " + _port);
             server.Start();
 
             //wait till we have a connection
@@ -65,8 +64,11 @@ namespace FlightSimulator
                 //---convert the data received into a string---
                 string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
                 Console.WriteLine("Received : " + dataReceived);
-                //TimeSpan interval = new TimeSpan(0, 0,10);
-                //Thread.Sleep(interval);
+
+                //getting the lon and the lat
+                string[] values = dataReceived.Split(',');
+                _fbvm.Lon = Convert.ToDouble(values[0]);
+                _fbvm.Lat = Convert.ToDouble(values[1]);
             }
         }
         //indication to see if we are connected to the simulator
@@ -74,10 +76,13 @@ namespace FlightSimulator
         {
             return hasConnected;
         }
-        public void Set_IP_Port(string ip,int port)
+
+        //set the ip and port manually
+        public void Set_IP_Port(string ip, int port)
         {
             _ip = IPAddress.Parse(ip);
             _port = port;
         }
+
     }
-}   
+}

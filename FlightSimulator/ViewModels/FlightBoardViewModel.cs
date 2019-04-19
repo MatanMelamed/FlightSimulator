@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Threading;
+using System.Windows;
+using System.ComponentModel;
 
 namespace FlightSimulator.ViewModels
 {
@@ -16,23 +18,56 @@ namespace FlightSimulator.ViewModels
     {
         private CommandHandler _openSettings;
         private CommandHandler _connectSimulator;
-        private SettingsView settingsView;
-        public volatile Server server;
-        public volatile Client client;
-        public FlightBoardViewModel()
+        public FlightBoardModel _fbm;
+        private double _lon;
+        private double _lat;
+        #region Singleton
+        private static FlightBoardViewModel m_Instance = null;
+        public static FlightBoardViewModel Instance
         {
-            settingsView = new SettingsView();
+            get
+            {
+                if (m_Instance == null)
+                {
+                    m_Instance = new FlightBoardViewModel();
+                    /*
+                    m_Instance._fbm = new FlightBoardModel();
+                    m_Instance._fbm.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+                      {
+                          m_Instance._fbm.NotifyPropertyChanged(e.PropertyName);
+                      };
+                      */
+                }
+                return m_Instance;
+            }
         }
-
+        #endregion
         public double Lon
         {
-            get;
+            get
+            {
+                return _lon;
+            }
+            set
+            {
+                _lon = value;
+
+            }
         }
 
         public double Lat
         {
-            get;
+            get
+            {
+                return _lat;
+            }
+            set
+            {
+                _lat = value;
+                NotifyPropertyChanged("Lat");
+            }
         }
+
 
         //open setting command
         public CommandHandler OpenSettingsCommand
@@ -46,9 +81,7 @@ namespace FlightSimulator.ViewModels
         //showing the setting window
         public void ShowSettings()
         {
-            settingsView.Close();
-            settingsView = new SettingsView();
-            settingsView.Show();
+            _fbm.ShowSettings();
         }
 
         //command to connect the program to the simulator
@@ -63,18 +96,13 @@ namespace FlightSimulator.ViewModels
         //connect simulator by Server-Client methodology
         public void ConnectSimulator()
         {
-            //connect server
-            server = Server.Instance;
-            Thread openServerThread = new Thread(server.Start);
-            openServerThread.Start();
-
-            client = Client.Instance;
-            Thread connectClient = new Thread(client.Start);
-            //wait server has a connection
-            while (!server.HasConnection());
-
-            //connect client
-            connectClient.Start();
+            _fbm.ConnectSimulator();
         }
     }
 }
+/*
+set controls/flight/rudder -1
+set controls/flight/rudder 1
+set controls/flight/rudder -1
+set controls/flight/rudder 1
+*/
