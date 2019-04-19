@@ -14,11 +14,46 @@ namespace FlightSimulator.Model
         private SettingsView settingsView;
         public volatile Server server;
         public volatile Client client;
-        public  FlightBoardModel ()
+        public static FlightBoardModel m_Instance = null;
+        double _lon = 0;
+        double _lat = 0;
+        public  static FlightBoardModel Instance
         {
-            settingsView = new SettingsView();
+            get
+            {
+                if (m_Instance == null)
+                {
+                    m_Instance = new FlightBoardModel();
+                    m_Instance.settingsView = new SettingsView();
+                }
+                return m_Instance;
+            }
         }
-        
+        public double Lon
+        {
+            get
+            {
+                return _lon;
+            }
+            set
+            {
+                _lon = value;
+
+            }
+        }
+
+        public double Lat
+        {
+            get
+            {
+                return _lat;
+            }
+            set
+            {
+                _lat = value;
+                NotifyPropertyChanged("Lat");
+            }
+        }
         //showing the setting window
         public void ShowSettings()
         {

@@ -20,7 +20,7 @@ namespace FlightSimulator
         private bool hasConnected;
         private IPAddress _ip;
         private int _port;
-        private FlightBoardViewModel _fbvm;
+        private FlightBoardModel _fbm;
         public static Server Instance
         {
             get
@@ -30,7 +30,7 @@ namespace FlightSimulator
                     m_Instance = new Server();
                     m_Instance._ip = IPAddress.Parse(Properties.Settings.Default.FlightServerIP);
                     m_Instance._port = Properties.Settings.Default.FlightInfoPort;
-                    m_Instance._fbvm = FlightBoardViewModel.Instance;
+                    m_Instance._fbm = FlightBoardModel.Instance;
                 }
                 return m_Instance;
             }
@@ -67,8 +67,8 @@ namespace FlightSimulator
 
                 //getting the lon and the lat
                 string[] values = dataReceived.Split(',');
-                _fbvm.Lon = Convert.ToDouble(values[0]);
-                _fbvm.Lat = Convert.ToDouble(values[1]);
+                _fbm.Lon = Convert.ToDouble(values[0]);
+                _fbm.Lat = Convert.ToDouble(values[1]);
             }
         }
         //indication to see if we are connected to the simulator

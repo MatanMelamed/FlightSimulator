@@ -22,35 +22,25 @@ namespace FlightSimulator.ViewModels
         private double _lon;
         private double _lat;
         #region Singleton
-        private static FlightBoardViewModel m_Instance = null;
-        public static FlightBoardViewModel Instance
+        public FlightBoardViewModel ()
         {
-            get
+            _fbm = FlightBoardModel.Instance;
+            //Notify the fit property in the view model
+            _fbm.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
             {
-                if (m_Instance == null)
-                {
-                    m_Instance = new FlightBoardViewModel();
-                    /*
-                    m_Instance._fbm = new FlightBoardModel();
-                    m_Instance._fbm.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
-                      {
-                          m_Instance._fbm.NotifyPropertyChanged(e.PropertyName);
-                      };
-                      */
-                }
-                return m_Instance;
-            }
+                NotifyPropertyChanged(e.PropertyName);
+            };
         }
         #endregion
         public double Lon
         {
             get
             {
-                return _lon;
+                return _fbm.Lon ;
             }
             set
             {
-                _lon = value;
+                _fbm.Lon = value;
 
             }
         }
@@ -59,11 +49,11 @@ namespace FlightSimulator.ViewModels
         {
             get
             {
-                return _lat;
+                return _fbm.Lat;
             }
             set
             {
-                _lat = value;
+                _fbm.Lat = value;
                 NotifyPropertyChanged("Lat");
             }
         }
