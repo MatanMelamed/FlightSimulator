@@ -15,8 +15,8 @@ namespace FlightSimulator.Model
         public volatile Server server;
         public volatile Client client;
         public static FlightBoardModel m_Instance = null;
-        double _lon = 0;
-        double _lat = 0;
+        private double _lon = 0;
+        private double _lat = 0;
         public  static FlightBoardModel Instance
         {
             get
@@ -29,6 +29,8 @@ namespace FlightSimulator.Model
                 return m_Instance;
             }
         }
+
+        //Lon property
         public double Lon
         {
             get
@@ -38,10 +40,10 @@ namespace FlightSimulator.Model
             set
             {
                 _lon = value;
-
             }
         }
 
+        //Lat property
         public double Lat
         {
             get
@@ -51,9 +53,11 @@ namespace FlightSimulator.Model
             set
             {
                 _lat = value;
+                //Notify change to the viewmodel
                 NotifyPropertyChanged("Lat");
             }
         }
+
         //showing the setting window
         public void ShowSettings()
         {
@@ -71,8 +75,7 @@ namespace FlightSimulator.Model
 
             client = Client.Instance;
             Thread connectClient = new Thread(client.Start);
-            //wait server has a connection
-            while (!server.HasConnection()) ;
+            
 
             //connect client
             connectClient.Start();

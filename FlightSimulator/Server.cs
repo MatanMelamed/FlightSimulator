@@ -39,13 +39,15 @@ namespace FlightSimulator
         //start recieving data
         public void Start()
         {
+            TcpClient client;
+            
             //connect to the simulator
             server = new TcpListener(_ip, _port);
             Console.WriteLine("Listening with ip: " + _ip.ToString() + " on port: " + _port);
             server.Start();
 
             //wait till we have a connection
-            TcpClient client = server.AcceptTcpClient();
+            client = server.AcceptTcpClient();
 
             //we connected to the simulator
             hasConnected = true;
@@ -82,6 +84,11 @@ namespace FlightSimulator
         {
             _ip = IPAddress.Parse(ip);
             _port = port;
+        }
+
+        public void Stop()
+        {
+            server.Stop();
         }
 
     }

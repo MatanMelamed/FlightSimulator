@@ -19,8 +19,6 @@ namespace FlightSimulator.ViewModels
         private CommandHandler _openSettings;
         private CommandHandler _connectSimulator;
         public FlightBoardModel _fbm;
-        private double _lon;
-        private double _lat;
         #region Singleton
         public FlightBoardViewModel ()
         {
