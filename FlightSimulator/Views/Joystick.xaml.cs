@@ -15,16 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace FlightSimulator.Views
-{
+namespace FlightSimulator.Views {
     /// <summary>
     /// Interaction logic for Joystick.xaml
     /// </summary>
-    public partial class Joystick : UserControl
-    {
+    public partial class Joystick : UserControl {
         /// <summary>Current Aileron</summary>
         public static readonly DependencyProperty AileronProperty =
-            DependencyProperty.Register("Aileron", typeof(double), typeof(Joystick),null);
+            DependencyProperty.Register("Aileron", typeof(double), typeof(Joystick), null);
 
         /// <summary>Current Elevator</summary>
         public static readonly DependencyProperty ElevatorProperty =
@@ -44,36 +42,30 @@ namespace FlightSimulator.Views
         //    DependencyProperty.Register(nameof(ResetKnobAfterRelease), typeof(bool), typeof(VirtualJoystick), new PropertyMetadata(true));
 
         /// <summary>Current Aileron in degrees from 0 to 360</summary>
-        public double Aileron
-        {
+        public double Aileron {
             get { return Convert.ToDouble(GetValue(AileronProperty)); }
             set { SetValue(AileronProperty, value); }
         }
 
         /// <summary>current Elevator (or "power"), from 0 to 100</summary>
-        public double Elevator
-        {
+        public double Elevator {
             get { return Convert.ToDouble(GetValue(ElevatorProperty)); }
             set { SetValue(ElevatorProperty, value); }
         }
 
         /// <summary>How often should be raised StickMove event in degrees</summary>
-        public double AileronStep
-        {
+        public double AileronStep {
             get { return Convert.ToDouble(GetValue(AileronStepProperty)); }
-            set
-            {
+            set {
                 if (value < 1) value = 1; else if (value > 90) value = 90;
                 SetValue(AileronStepProperty, Math.Round(value));
             }
         }
 
         /// <summary>How often should be raised StickMove event in Elevator units</summary>
-        public double ElevatorStep
-        {
+        public double ElevatorStep {
             get { return Convert.ToDouble(GetValue(ElevatorStepProperty)); }
-            set
-            {
+            set {
                 if (value < 1) value = 1; else if (value > 50) value = 50;
                 SetValue(ElevatorStepProperty, value);
             }
@@ -109,8 +101,7 @@ namespace FlightSimulator.Views
         private double canvasWidth, canvasHeight;
         private readonly Storyboard centerKnob;
 
-        public Joystick()
-        {
+        public Joystick() {
             InitializeComponent();
 
             Knob.MouseLeftButtonDown += Knob_MouseLeftButtonDown;
@@ -120,8 +111,7 @@ namespace FlightSimulator.Views
             centerKnob = Knob.Resources["CenterKnob"] as Storyboard;
         }
 
-        private void Knob_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        private void Knob_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
             _startPos = e.GetPosition(Base);
             _prevAileron = _prevElevator = 0;
             canvasWidth = Base.ActualWidth - KnobBase.ActualWidth;
@@ -132,8 +122,7 @@ namespace FlightSimulator.Views
             centerKnob.Stop();
         }
 
-        private void Knob_MouseMove(object sender, MouseEventArgs e)
-        {
+        private void Knob_MouseMove(object sender, MouseEventArgs e) {
             ///!!!!!!!!!!!!!!!!!
             /// YOU MUST CHANGE THE FUNCTION!!!!
             ///!!!!!!!!!!!!!!
@@ -146,8 +135,8 @@ namespace FlightSimulator.Views
             double distance = Math.Round(Math.Sqrt(deltaPos.X * deltaPos.X + deltaPos.Y * deltaPos.Y));
             if (distance >= canvasWidth / 2 || distance >= canvasHeight / 2)
                 return;
-            Aileron = -deltaPos.Y;
-            Elevator = deltaPos.X;
+            Aileron = deltaPos.X / 124;
+            Elevator = -deltaPos.Y / 124;
 
             knobPosition.X = deltaPos.X;
             knobPosition.Y = deltaPos.Y;
@@ -162,14 +151,12 @@ namespace FlightSimulator.Views
 
         }
 
-        private void Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
+        private void Knob_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
             Knob.ReleaseMouseCapture();
             centerKnob.Begin();
         }
 
-        private void centerKnob_Completed(object sender, EventArgs e)
-        {
+        private void centerKnob_Completed(object sender, EventArgs e) {
             Aileron = Elevator = _prevAileron = _prevElevator = 0;
             Released?.Invoke(this);
         }

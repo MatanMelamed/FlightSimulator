@@ -59,10 +59,10 @@ namespace FlightSimulator.Model
             string[] commands = Text_Changed.Split('\n');
 
             //set the commands to the client
-            _client.SetCommands(commands);
+            //_client.SetCommands(commands);
 
             //send commnads to the simulator
-            _client.Send();
+            //_client.Send();
 
             //changing the background back to transparent
             Background_Changed = Brushes.Transparent;

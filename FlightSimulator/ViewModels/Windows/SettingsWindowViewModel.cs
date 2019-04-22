@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
+//<vm:SettingsViewModel x:Key="SettingsViewModel"/>
+//Text="{Binding Path=FlightServerIP,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+
 namespace FlightSimulator.ViewModels.Windows
 {
     public class SettingsWindowViewModel : BaseNotify
@@ -18,7 +21,7 @@ namespace FlightSimulator.ViewModels.Windows
         {
             this.model = model;
         }
-
+        
         public string FlightServerIP
         {
             get { return model.FlightServerIP; }
@@ -49,8 +52,6 @@ namespace FlightSimulator.ViewModels.Windows
             }
         }
 
-     
-
         public void SaveSettings()
         {
             model.SaveSettings();
@@ -59,6 +60,9 @@ namespace FlightSimulator.ViewModels.Windows
         public void ReloadSettings()
         {
             model.ReloadSettings();
+            FlightServerIP = model.FlightServerIP;
+            FlightCommandPort = model.FlightCommandPort;
+            FlightInfoPort = model.FlightInfoPort;
         }
 
         #region Commands
@@ -73,7 +77,7 @@ namespace FlightSimulator.ViewModels.Windows
         }
         private void OnClick()
         {
-            model.SaveSettings();
+            SaveSettings();
         }
         #endregion
 
@@ -88,7 +92,7 @@ namespace FlightSimulator.ViewModels.Windows
         }
         private void OnCancel()
         {
-            model.ReloadSettings();
+            ReloadSettings();
         }
         #endregion
         #endregion

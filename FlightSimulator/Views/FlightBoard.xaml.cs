@@ -18,37 +18,32 @@ using FlightSimulator.ViewModels;
 using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 
-namespace FlightSimulator.Views
-{
+namespace FlightSimulator.Views {
     /// <summary>
     /// Interaction logic for MazeBoard.xaml
     /// </summary>
-    public partial class FlightBoard : UserControl
-    {
+    public partial class FlightBoard : UserControl {
+
         ObservableDataSource<Point> planeLocations = null;
-        FlightBoardViewModel fbvm;
-        public FlightBoard()
-        {
+        FlightBoardViewModel flightBoardViewModel;
+
+        public FlightBoard() {
             InitializeComponent();
-            fbvm = new FlightBoardViewModel();
-            DataContext = fbvm;
+            flightBoardViewModel = new FlightBoardViewModel();
+            DataContext = flightBoardViewModel;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
+        private void UserControl_Loaded(object sender, RoutedEventArgs e) {
             planeLocations = new ObservableDataSource<Point>();
             // Set identity mapping of point in collection to point on plot
             planeLocations.SetXYMapping(p => p);
             plotter.AddLineGraph(planeLocations, 2, "Route");
-            fbvm.PropertyChanged += Vm_PropertyChanged;
+            flightBoardViewModel.PropertyChanged += Vm_PropertyChanged;
         }
 
-        private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName.Equals("Lat") || e.PropertyName.Equals("Lon"))
-            {
-                FlightBoardViewModel x = (FlightBoardViewModel)sender;
-                Point p1 = new Point(x.Lon,x.Lat);            // Fill here!
+        private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            if (e.PropertyName.Equals("Lat") || e.PropertyName.Equals("Lon")) {
+                Point p1 = new Point(flightBoardViewModel.Lon, flightBoardViewModel.Lat);            // Fill here!
                 planeLocations.AppendAsync(Dispatcher, p1);
             }
         }

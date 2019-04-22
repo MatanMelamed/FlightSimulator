@@ -17,6 +17,7 @@ namespace FlightSimulator.Model
             {
                 if(m_Instance == null)
                 {
+                    Properties.Settings.Default.Reset();
                     m_Instance = new ApplicationSettingsModel();
                 }
                 return m_Instance;
@@ -25,7 +26,8 @@ namespace FlightSimulator.Model
         #endregion
         public string FlightServerIP
         {
-            get { return Properties.Settings.Default.FlightServerIP; }
+            get {
+                return Properties.Settings.Default.FlightServerIP; }
             set { Properties.Settings.Default.FlightServerIP = value; }
         }
         public int FlightCommandPort

@@ -12,82 +12,55 @@ using System.Threading;
 using System.Windows;
 using System.ComponentModel;
 
-namespace FlightSimulator.ViewModels
-{
-    public class FlightBoardViewModel : BaseNotify
-    {
+namespace FlightSimulator.ViewModels {
+    public class FlightBoardViewModel : BaseNotify {
+
         private CommandHandler _openSettings;
         private CommandHandler _connectSimulator;
-        public FlightBoardModel _fbm;
-        #region Singleton
-        public FlightBoardViewModel ()
-        {
-            _fbm = FlightBoardModel.Instance;
-            //Notify the fit property in the view model
-            _fbm.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
-            {
+        public FlightBoardModel _flightBoardModel;
+
+        public FlightBoardViewModel() {
+            _flightBoardModel = new FlightBoardModel();
+
+            //Tie and chain the Notify of the viewModel with the model Notify - when the model notify, the viewModel notify As well.
+            _flightBoardModel.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e) {
                 NotifyPropertyChanged(e.PropertyName);
             };
         }
-        #endregion
-        public double Lon
-        {
-            get
-            {
-                return _fbm.Lon ;
-            }
-            set
-            {
-                _fbm.Lon = value;
 
-            }
+        //Longtitude and Latitude values are drawn and set from the model
+        public double Lon {
+            get { return _flightBoardModel.Lon; }
+            set { _flightBoardModel.Lon = value; }
         }
 
-        public double Lat
-        {
-            get
-            {
-                return _fbm.Lat;
-            }
-            set
-            {
-                _fbm.Lat = value;
-                NotifyPropertyChanged("Lat");
-            }
+        public double Lat {
+            get { return _flightBoardModel.Lat; }
+            set { _flightBoardModel.Lat = value; }
         }
 
-
-        //open setting command
-        public CommandHandler OpenSettingsCommand
-        {
-            get
-            {
+        public CommandHandler OpenSettingsCommand {
+            get {
                 return _openSettings ?? (_openSettings = new CommandHandler(() => ShowSettings()));
             }
         }
 
-        //showing the setting window
-        public void ShowSettings()
-        {
-            _fbm.ShowSettings();
+        public void ShowSettings() {
+            _flightBoardModel.ShowSettings();
         }
 
-        //command to connect the program to the simulator
-        public CommandHandler ConnectCommnad
-        {
-            get
-            {
+        public CommandHandler ConnectCommnad {
+            get {
                 return _connectSimulator ?? (_connectSimulator = new CommandHandler(() => ConnectSimulator()));
             }
         }
 
-        //connect simulator by Server-Client methodology
-        public void ConnectSimulator()
-        {
-            _fbm.ConnectSimulator();
+        public void ConnectSimulator() {
+            _flightBoardModel.ConnectSimulator();
         }
     }
 }
+    
 /*
 set controls/flight/rudder -1
 set controls/flight/rudder 1

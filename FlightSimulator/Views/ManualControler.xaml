@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:parts="clr-namespace:FlightSimulator.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="550"
+             d:DesignHeight="450" d:DesignWidth="512"
              Height="450" Width="550">
 
     <UserControl.Resources>
@@ -15,6 +15,13 @@
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <RotateTransform x:Key="rotate" Angle="90"/>
+        <Style TargetType="Slider">
+            <Setter Property="TickFrequency" Value="0.1"/>
+            <Setter Property="Minimum" Value="-1"/>
+            <Setter Property="Maximum" Value="1"/>
+            <Setter Property="TickPlacement" Value="BottomRight"/>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -22,73 +29,35 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
 
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="64"/>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="64"/>
+            <ColumnDefinition Width="40"/>
 
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="← throttle →" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Margin="-39,125,15,154" Grid.Row="2" >
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
+        <TextBlock Text="← throttle →" Grid.Row="2" LayoutTransform="{StaticResource rotate}" Margin="0,0,0,35"/>
+        <Slider Value="{Binding Throttle}" Orientation="Vertical" Height="300" Grid.Column="1" Grid.Row="2" Margin="0,0,20,0"/>
+        <TextBlock Text="{Binding Throttle}" Grid.Row="1" Grid.Column="1"/>
 
-        <Slider x:Name="throttle_slider" Orientation="Vertical" TickPlacement="BottomRight" Grid.Column="1" Grid.Row="2" Minimum="-1" Maximum="1" TickFrequency="0.1" Height="300" Margin="20,0,10,0"/>
+        <TextBlock Text="← rudder →" Grid.Row="4" Grid.Column="2"/>
+        <Slider Value="{Binding Rudder}" Grid.Row="3" Grid.Column="2" Margin="24,20,24,0"/>
+        <TextBlock Text="{Binding Rudder}" Grid.Row="3" Grid.Column="3"/>
 
-        <TextBlock x:Name="throttle_indicator" Grid.Row="1" Grid.Column="2" Text="0" Margin="5"/>
+        <parts:Joystick Aileron="{Binding Aileron, Mode=OneWayToSource}" Elevator="{Binding Elevator, Mode=OneWayToSource}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"/>
 
-        <TextBlock Text="← aileron →" Grid.ColumnSpan="6"/>
+        <TextBlock Text="← aileron →" Grid.Column="2" Margin="0,10,0,10"/>
+        <TextBlock Text="{Binding Aileron}" Grid.Column="3"/>
 
-        <parts:Joystick Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-
-        <Slider x:Name="rudder_slider" Grid.Row="3" Grid.Column="3" TickPlacement="BottomRight" Minimum="-1" Maximum="1" TickFrequency="0.1" Margin="0,20,0,0" Width="300"/>
-
-        <TextBlock Text="← rudder →" Grid.Row="4" Grid.ColumnSpan="6"/>
-
-        <TextBlock x:Name="rudder_indicator" Grid.Row="3" Grid.Column="4" Text="0"/>
-
-        <TextBlock x:Name="aileron_indicator" Grid.Column="4" Text="0.0"/>
-
-        <TextBlock x:Name="elevator_indicator" Grid.Row="1" Grid.Column="5" Text="0.0" RenderTransformOrigin="0.5,0.5">
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
-
-        <TextBlock Grid.Column="3" Text="← elevator →" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="3" Margin="302,126,-41,159" Grid.Row="2" >
-            <TextBlock.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="90"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </TextBlock.RenderTransform>
-        </TextBlock>
-
-      
-
+        <TextBlock Text="← elevator →" Grid.Column="4" Grid.Row="2" LayoutTransform="{StaticResource rotate}" Margin="0,0,0,35"/>
+        <TextBlock Text="{Binding Elevator}" Grid.RowSpan="2" Grid.Column="4" Margin="0,20,0,0" LayoutTransform="{StaticResource rotate}"/>
+        
     </Grid>
 </UserControl>
