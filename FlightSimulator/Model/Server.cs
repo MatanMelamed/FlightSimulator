@@ -5,32 +5,46 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FlightSimulator.ViewModels;
 
 namespace FlightSimulator {
     class Server {
 
-        #region Server members
+        #region Network members
         private TcpListener _listener;
         private IPAddress _ip;
         private int _port;
-        private Task _clientHandlerTask;
-        private CancellationTokenSource _tokenSource;
-        private CancellationToken _taskToken;
+        #endregion
+
+        #region Tasks management members
+        CancellationTokenSource _tokenSource;
+        CancellationToken _taskToken;
+        Task _startServerTask = null;
+        Task _stopServerTask = null;
+        #endregion
+
+        #region Connection events cross threads members
         public bool HasConnection { get; private set; }
+        public ManualResetEvent GotConnected;
         #endregion
 
         FlightBoardModel flightBoardModel;
 
+        #region Singleton
         private static Server m_Instance = null;
         public static Server Instance {
             get {
                 if (m_Instance == null) {
                     m_Instance = new Server();
+                    m_Instance._tokenSource = new CancellationTokenSource();
+                    m_Instance._taskToken = m_Instance._tokenSource.Token;
+                    m_Instance.GotConnected = new ManualResetEvent(false);
                     m_Instance.HasConnection = false;
                 }
                 return m_Instance;
             }
         }
+        #endregion
 
         public void UpdateConnectionInfo() {
             _ip = IPAddress.Parse(Properties.Settings.Default.FlightServerIP);
@@ -48,6 +62,7 @@ namespace FlightSimulator {
 
             //wait till we have a connection
             TcpClient tcpClient = _listener.AcceptTcpClient();
+            GotConnected.Set();
             HasConnection = true;
             return tcpClient;
         }
@@ -76,43 +91,39 @@ namespace FlightSimulator {
             HasConnection = false;
         }
 
+        // Start the server in a new task thread.
         public void Start() {
-            UpdateConnectionInfo();
-            TcpClient client = ListenForAClient();
-            _tokenSource = new CancellationTokenSource();
-            _taskToken = _tokenSource.Token;
-            _clientHandlerTask = Task.Run(() => HandleClient(client), _taskToken);
-        }
+            if (_startServerTask != null && _startServerTask.Status == TaskStatus.Running) {
+                return;
+            }
 
-        public void Stop() {
-            _tokenSource.Cancel();
-        }
+            _startServerTask = Task.Run(() => {
+                if (_stopServerTask != null) {
+                    _stopServerTask.Wait();
+                }
 
-
-        /***
- * 
- * Task oldClientHandlerTask = _clientHandlerTask;
-
-            CancellationTokenSource newSource = new CancellationTokenSource();
-            CancellationToken newToken = newSource.Token;
-
-            _clientHandlerTask = Task.Run(() => {
-                oldClientHandlerTask.Wait();
-                _tokenSource.Dispose();
-                _tokenSource = newSource;
-                _taskToken = newToken;
                 UpdateConnectionInfo();
                 TcpClient client = ListenForAClient();
                 HandleClient(client);
-            }, newToken);
- ***/
 
-        public void Reset() {
-            Stop();
-            _clientHandlerTask.Wait();
-            _tokenSource.Dispose();
-            Start();
+            }, _taskToken);
+
+        }
+
+        // Stop the server in a new task thread.
+        public void Stop() {
+            if (_startServerTask == null || _startServerTask.Status != TaskStatus.Running) {
+                return;
+            }
+
+            _stopServerTask = Task.Run(() => {
+                _tokenSource.Cancel();
+                _startServerTask.Wait();
+                _tokenSource.Dispose();
+                _tokenSource = new CancellationTokenSource();
+                _taskToken = _tokenSource.Token;
+                GotConnected.Reset();
+            });
         }
     }
 }
-

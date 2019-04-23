@@ -1,7 +1,5 @@
 ﻿using FlightSimulator.ViewModels;
-using FlightSimulator.Model;
 using FlightSimulator.Views;
-using System.Threading;
 
 namespace FlightSimulator.Model {
     public class FlightBoardModel : ModelNotify {
@@ -43,15 +41,13 @@ namespace FlightSimulator.Model {
         public void ConnectSimulator() {
             
             Server server = Server.Instance;
-            if (!server.HasConnection) {
-                server.Start();
+            if (server.HasConnection) {
+                server.Stop();
             }
-            else {
-                server.Reset();
-            }
+            server.Start();
 
             Client client = Client.Instance;
-            if (client.IsConnected()) {
+            if (client.IsConnected) {
                 client.Disconnect();
             }
             client.Connect();
