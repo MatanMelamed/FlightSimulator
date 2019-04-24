@@ -35,9 +35,14 @@
         <TextBlock Text="Lon" Style="{StaticResource LabelStyle}" LayoutTransform="{StaticResource rotate}" VerticalAlignment="Center" Grid.Row="1"/>
 
         <TextBlock Text="Lat" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+        
         <Viewbox Grid.Row="0" Grid.Column="1">
             <Button Name="connectButton" Content="Connect" Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,200,0"
                 Command="{Binding ConnectCommnad}" CommandParameter="{Binding ElementName=connectButton}"/>
+        </Viewbox>
+        <Viewbox Grid.Row="0" Grid.Column="1">
+            <Button Name="disconnectButton" Content="Disconnect" Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,0,0"
+                Command="{Binding DisconnectCommnad}" CommandParameter="{Binding ElementName=disconnectButton}"/>
         </Viewbox>
         <Viewbox Grid.Row="0" Grid.Column="1">
         <Button Content="Settings" Height="40" Width="80" VerticalAlignment="Top" Margin="200,10,0,0"

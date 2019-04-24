@@ -8,8 +8,8 @@
         xmlns:server  ="clr-namespace:FlightSimulator"
         xmlns:vm ="clr-namespace:FlightSimulator.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1150"
-        >
+        Title="MainWindow" Height="600" Width="1150">
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

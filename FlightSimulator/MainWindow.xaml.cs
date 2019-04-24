@@ -15,22 +15,13 @@ using FlightSimulator;
 using FlightSimulator.UserControls;
 using FlightSimulator.ViewModels;
 
-namespace FlightSimulator
-{
+namespace FlightSimulator {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
+    public partial class MainWindow : Window {
+        public MainWindow() {
             InitializeComponent();
-            DataContext = new AutoPilotViewModel();
-            //Client c = new Client();
-            //c.Start();
-            //Server server = new Server();
-            //server.Start();
         }
-
     }
 }

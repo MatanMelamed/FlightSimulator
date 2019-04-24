@@ -17,6 +17,7 @@ namespace FlightSimulator.ViewModels {
 
         private CommandHandler _openSettings;
         private CommandHandler _connectSimulator;
+        private CommandHandler _disconnectSimulator;
         public FlightBoardModel _flightBoardModel;
 
         public FlightBoardViewModel() {
@@ -55,8 +56,18 @@ namespace FlightSimulator.ViewModels {
             }
         }
 
+        public CommandHandler DisconnectCommnad {
+            get {
+                return _disconnectSimulator ?? (_disconnectSimulator = new CommandHandler(() => DisconnectSimulator()));
+            }
+        }
+
         public void ConnectSimulator() {
             _flightBoardModel.ConnectSimulator();
+        }
+
+        public void DisconnectSimulator() {
+            _flightBoardModel.DisconnectSimulator();
         }
     }
 }

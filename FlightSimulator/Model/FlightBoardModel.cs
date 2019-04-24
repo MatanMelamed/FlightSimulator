@@ -1,5 +1,6 @@
 ﻿using FlightSimulator.ViewModels;
 using FlightSimulator.Views;
+using System.Threading.Tasks;
 
 namespace FlightSimulator.Model {
     public class FlightBoardModel : ModelNotify {
@@ -51,6 +52,22 @@ namespace FlightSimulator.Model {
                 client.Disconnect();
             }
             client.Connect();
+        }
+
+        public void DisconnectSimulator() {
+            System.Console.WriteLine("disconnecting");
+            Task.Run(() => {
+                Task stopServer = Server.Instance.Stop();
+                if(stopServer != null) {
+                    stopServer.Wait();
+                }
+                Task stopClient = Client.Instance.Disconnect();
+                if(stopClient != null) {
+                    stopClient.Wait();
+                }
+
+                System.Console.WriteLine("disconnected");
+            });
         }
     }
 }
