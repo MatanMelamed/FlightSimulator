@@ -56,8 +56,9 @@ namespace FlightSimulator.Model
             //change the backround to a busy color - Pink
             Background_Changed = Brushes.Pink;
             //split the textbox to a list of commands
-            string[] commands = Text_Changed.Split('\n');
+            List<string> commands = Text_Changed.Split('\n').ToList<string>();
 
+            _client.SendToSimulator(commands);
             //set the commands to the client
             //_client.SetCommands(commands);
 

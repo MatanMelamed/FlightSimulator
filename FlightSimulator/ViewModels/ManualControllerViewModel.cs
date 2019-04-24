@@ -14,7 +14,7 @@ namespace FlightSimulator.ViewModels {
             get { return (float)(Math.Truncate((double)throttle * 10.0) / 10.0); }
             set {
                 throttle = value;
-                SendCommandToClient("throttle ",value);
+                SendCommandToClient("set /controls/engines/current-engine/throttle ", value);
             }
         }
 
@@ -23,7 +23,7 @@ namespace FlightSimulator.ViewModels {
             get { return (float)(Math.Truncate((double)rudder * 10.0) / 10.0); }
             set {
                 rudder = value;
-                SendCommandToClient("rudder ",value);
+                SendCommandToClient("set /controls/flight/rudder ", value);
             }
         }
 
@@ -32,7 +32,7 @@ namespace FlightSimulator.ViewModels {
             get { return Math.Truncate(aileron * 10.0) / 10.0; }
             set {
                 aileron = value;
-                SendCommandToClient("aileron ",value);
+                SendCommandToClient("set /controls/flight/aileron ", value);
             }
         }
 
@@ -41,7 +41,7 @@ namespace FlightSimulator.ViewModels {
             get { return Math.Truncate(elevator * 10.0) / 10.0; }
             set {
                 elevator = value;
-                SendCommandToClient("elevator ",value);
+                SendCommandToClient("set /controls/flight/elevator ", value);
             }
         }
 
