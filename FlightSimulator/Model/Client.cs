@@ -35,6 +35,8 @@ namespace FlightSimulator {
                 if (m_Instance == null) {
                     m_Instance = new Client();
                     m_Instance._client = new TcpClient();
+                    m_Instance.commands = new ConcurrentQueue<string>();
+                    m_Instance.GotCommands = new ManualResetEvent(false);
                 }
                 return m_Instance;
             }
@@ -43,7 +45,7 @@ namespace FlightSimulator {
 
         void UpdateConnectionInfo() {
             _ip = Properties.Settings.Default.FlightServerIP;
-            _port = Properties.Settings.Default.FlightInfoPort;
+            _port = Properties.Settings.Default.FlightCommandPort;
         }
 
         void ConnectToTarget() {
