@@ -79,7 +79,7 @@ namespace FlightSimulator {
 
                 //---convert the data received into a string---
                 string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                Console.WriteLine("Received : " + dataReceived);
+                //Console.WriteLine("Received : " + dataReceived);
 
                 //getting the lon and the lat
                 string[] values = dataReceived.Split(',');
@@ -115,7 +115,7 @@ namespace FlightSimulator {
             if (_startServerTask == null || _startServerTask.Status != TaskStatus.Running) {
                 return;
             }
-
+            Console.WriteLine("Closing Server");
             _stopServerTask = Task.Run(() => {
                 _tokenSource.Cancel();
                 _startServerTask.Wait();

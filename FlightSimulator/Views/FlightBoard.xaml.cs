@@ -44,6 +44,9 @@ namespace FlightSimulator.Views {
         private void Vm_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName.Equals("Lat") || e.PropertyName.Equals("Lon")) {
                 Point p1 = new Point(flightBoardViewModel.Lon, flightBoardViewModel.Lat);            // Fill here!
+                /*FlightBoardViewModel x = (FlightBoardViewModel)sender;
+                Console.WriteLine("sender Lat:" + x.Lat+ " sender Lon:" + x.Lon);
+                Console.WriteLine("Lat:" + flightBoardViewModel.Lat + " Lon:" + flightBoardViewModel.Lon);*/
                 planeLocations.AppendAsync(Dispatcher, p1);
             }
         }

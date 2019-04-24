@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FlightSimulator.UserControls"
         xmlns:views ="clr-namespace:FlightSimulator.Views"
+        xmlns:server  ="clr-namespace:FlightSimulator"
         xmlns:vm ="clr-namespace:FlightSimulator.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="1150"
@@ -20,7 +21,9 @@
         <DockPanel Grid.Column="1" >
             <TabControl>
                 <TabItem Width="80" Height="40" Header="Manual">
-                    <local:ManualControler/>
+                    <Viewbox>
+                        <local:ManualControler/>
+                    </Viewbox>
                 </TabItem>
                 <TabItem Width="80" Height="40" Header="Auto Pilot">
                     <local:AutoPilot/>

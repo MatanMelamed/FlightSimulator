@@ -24,21 +24,25 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            
         </Grid.RowDefinitions>
+        
+        <d3:ChartPlotter Name="plotter" Grid.Row="1" Grid.Column="1" LegendVisible="False" Margin="0,5,20,0"/>
 
-        <d3:ChartPlotter Name="plotter" Grid.Row="0" Grid.Column="1" LegendVisible="False" Margin="0,60,20,0"/>
+        <TextBlock Text="Lon" Style="{StaticResource LabelStyle}" LayoutTransform="{StaticResource rotate}" VerticalAlignment="Center" Grid.Row="1"/>
 
-        <TextBlock Text="Lon" Style="{StaticResource LabelStyle}" LayoutTransform="{StaticResource rotate}" VerticalAlignment="Center"/>
-
-        <TextBlock Text="Lat" Grid.Row="1" Grid.ColumnSpan="2" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
-
-        <Button Name="connectButton" Content="Connect" Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,200,0" Grid.Column="1" 
+        <TextBlock Text="Lat" Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LabelStyle}" HorizontalAlignment="Center"/>
+        <Viewbox Grid.Row="0" Grid.Column="1">
+            <Button Name="connectButton" Content="Connect" Height="40" Width="80" VerticalAlignment="Top" Margin="0,10,200,0"
                 Command="{Binding ConnectCommnad}" CommandParameter="{Binding ElementName=connectButton}"/>
-
-        <Button Content="Settings" Height="40" Width="80" VerticalAlignment="Top" Margin="200,10,0,0" Grid.Column="1" 
+        </Viewbox>
+        <Viewbox Grid.Row="0" Grid.Column="1">
+        <Button Content="Settings" Height="40" Width="80" VerticalAlignment="Top" Margin="200,10,0,0"
                 Command="{Binding OpenSettingsCommand}" />
+        </Viewbox>
 
     </Grid>
 </UserControl>
