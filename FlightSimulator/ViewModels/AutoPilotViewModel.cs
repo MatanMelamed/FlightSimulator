@@ -81,6 +81,7 @@ namespace FlightSimulator.ViewModels
         public void Clear_Commands()
         {
             VM_Text_Changed = "";
+            _apm.Background_Changed = Brushes.Transparent;
         }
 
         //send the commands to the simulator in other thread

@@ -25,6 +25,8 @@ namespace FlightSimulator.Model {
             }
             set {
                 _command_text = value;
+                //change the backround to a busy color - Pink
+                Background_Changed = Brushes.Pink;
                 //notify change
                 NotifyPropertyChanged("Text_Changed");
             }
@@ -43,8 +45,7 @@ namespace FlightSimulator.Model {
         //send the commands to the simulator
         public void Send_Commands() {
 
-            //change the backround to a busy color - Pink
-            Background_Changed = Brushes.Pink;
+            
             //split the textbox to a list of commands
             List<string> commands = Text_Changed.Split('\n').ToList<string>();
 
