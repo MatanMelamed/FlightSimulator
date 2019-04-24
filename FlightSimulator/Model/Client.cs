@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace FlightSimulator {
 
+    
+
     public class CommandPackage {
         public List<string> commands { get; set; }
         public ManualResetEvent finishedEvent { get; set; }
@@ -37,6 +39,9 @@ namespace FlightSimulator {
         CancellationToken _taskToken;
         Task _startClientTask = null;
         Task _stopClientTask = null;
+        int AutoOrManuel;
+        const int MANUAL_VAL = 2;
+        const int AUTO_VAL = 1;
         #endregion
 
         #region Client job members
@@ -127,8 +132,11 @@ namespace FlightSimulator {
                     foreach (string commmand in package.commands) {
                         byte[] buffer = encoding.GetBytes(commmand + "\r\n");
                         networkStream.Write(buffer, 0, buffer.Length);
-                        networkStream.Flush();
-                        Thread.Sleep(2000); //wait 2 seconds each command
+                        if (AutoOrManuel == AUTO_VAL)
+                        {
+                            networkStream.Flush();
+                            Thread.Sleep(2000); //wait 2 seconds each command
+                        }
                     }
 
                     if(package.finishedEvent != null) {
@@ -180,5 +188,14 @@ namespace FlightSimulator {
                 IsConnected = false;
             });
         }
+        public void SetAuto()
+        {
+            AutoOrManuel = AUTO_VAL;
+        }
+        public void SetManual()
+        {
+            AutoOrManuel = MANUAL_VAL;
+        }
     }
+    
 }

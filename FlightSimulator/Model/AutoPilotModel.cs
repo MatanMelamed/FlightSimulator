@@ -61,6 +61,7 @@ namespace FlightSimulator.Model
             ManualResetEvent commandsSent = new ManualResetEvent(false);
         
             _client.SendToSimulator(commands,commandsSent);
+            _client.SetAuto();
 
             commandsSent.WaitOne();
             //set the commands to the client

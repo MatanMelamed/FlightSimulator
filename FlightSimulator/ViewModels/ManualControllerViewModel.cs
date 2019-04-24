@@ -52,6 +52,7 @@ namespace FlightSimulator.ViewModels {
             lst.Add(command);
 
             if (m_client.IsConnected) {
+                m_client.SetManual();
                 m_client.SendToSimulator(lst);
             }            
         }
