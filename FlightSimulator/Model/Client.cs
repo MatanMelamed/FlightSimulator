@@ -7,6 +7,22 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace FlightSimulator {
+
+    public class CommandPackage {
+        public List<string> commands { get; set; }
+        public ManualResetEvent finishedEvent { get; set; }
+
+        public CommandPackage(List<string> newCommands, ManualResetEvent newFinishedEvent = null) {
+            this.commands = newCommands;
+            if (newFinishedEvent == null) {
+                this.finishedEvent = new ManualResetEvent(false);
+            }
+            else {
+                this.finishedEvent = newFinishedEvent;
+            }
+        }
+    }
+
     public class Client {
 
         #region Network members
@@ -24,7 +40,7 @@ namespace FlightSimulator {
         #endregion
 
         #region Client job members
-        ConcurrentQueue<string> commands;
+        ConcurrentQueue<CommandPackage> commands;
         public ManualResetEvent GotCommands;
         #endregion
 
@@ -35,7 +51,7 @@ namespace FlightSimulator {
                 if (m_Instance == null) {
                     m_Instance = new Client();
                     m_Instance._client = new TcpClient();
-                    m_Instance.commands = new ConcurrentQueue<string>();
+                    m_Instance.commands = new ConcurrentQueue<CommandPackage>();
                     m_Instance.GotCommands = new ManualResetEvent(false);
                 }
                 return m_Instance;
@@ -52,27 +68,45 @@ namespace FlightSimulator {
             UpdateConnectionInfo();
             _client.Connect(_ip, _port);
             Console.WriteLine("Sending in ip: " + _ip + " on port: " + _port);
+            IsConnected = true;
         }
 
         /***
          * Add command or commands to send to the simulator
          * In case of both valid input, insert list first and then single command.
          * */
-        public void SendToSimulator(List<string> newCommands, string newCommand = null) {
+        //public void SendToSimulator(List<string> newCommands, string newCommand = null) {
 
-            if (newCommands != null) {
-                foreach (string command in newCommands) {
-                    commands.Enqueue(newCommand);
-                }
+        //    if (newCommands != null) {
+        //        foreach (string command in newCommands) {
+        //            commands.Enqueue(newCommand);
+        //        }
+        //    }
+
+        //    if(newCommand != null) {
+        //        commands.Enqueue(newCommand);
+        //    }
+
+        //    // checks if the event is ready to be fired
+        //    // event can only get ready by main loop when main loop is sleeping
+        //    if (!GotCommands.WaitOne(0)) {
+        //        GotCommands.Set();
+        //    }
+        //}
+
+        public void SendToSimulator(List<string> newCommands, ManualResetEvent newFinishedEvent = null) {
+
+            CommandPackage newPackage = new CommandPackage(newCommands); ;
+
+            if (newFinishedEvent != null) {
+                newPackage.finishedEvent = newFinishedEvent;
             }
 
-            if(newCommand != null) {
-                commands.Enqueue(newCommand);
-            }
+            commands.Enqueue(newPackage);
 
             // checks if the event is ready to be fired
             // event can only get ready by main loop when main loop is sleeping
-            if (GotCommands.WaitOne(0)) {
+            if (!GotCommands.WaitOne(0)) {
                 GotCommands.Set();
             }
         }
@@ -83,17 +117,23 @@ namespace FlightSimulator {
          * should make sure the function is not sleeping in order to cancel it.
          ***/
         void RunMainLoop() {
-            string command;
+            CommandPackage package;
             NetworkStream networkStream = _client.GetStream();
             ASCIIEncoding encoding = new ASCIIEncoding();
 
             while (!_taskToken.IsCancellationRequested) {
                 while (!commands.IsEmpty && !_taskToken.IsCancellationRequested) {
-                    commands.TryDequeue(out command);
-                    byte[] buffer = encoding.GetBytes(command + "\r\n");
-                    networkStream.Write(buffer, 0, buffer.Length);
-                    networkStream.Flush();
-                    Thread.Sleep(2000); //wait 2 seconds each command
+                    commands.TryDequeue(out package);
+                    foreach (string commmand in package.commands) {
+                        byte[] buffer = encoding.GetBytes(commmand + "\r\n");
+                        networkStream.Write(buffer, 0, buffer.Length);
+                        networkStream.Flush();
+                        Thread.Sleep(2000); //wait 2 seconds each command
+                    }
+
+                    if(package.finishedEvent != null) {
+                        package.finishedEvent.Set();
+                    }
                 }
                 GotCommands.Reset();
                 GotCommands.WaitOne();
@@ -108,9 +148,9 @@ namespace FlightSimulator {
 
             _startClientTask = Task.Run(() => {
                 // Check if the server has already a connection, else sleep until event happen
-                if (!Server.Instance.HasConnection) {
-                    Server.Instance.GotConnected.WaitOne();
-                }
+                //if (!Server.Instance.HasConnection) {
+                //    Server.Instance.GotConnected.WaitOne();
+                //}
 
                 // check if disconnect thread is running, and wait for it to finish before continuing
                 if (_stopClientTask != null) {
@@ -137,6 +177,7 @@ namespace FlightSimulator {
                 _tokenSource.Dispose();
                 _tokenSource = new CancellationTokenSource();
                 _taskToken = _tokenSource.Token;
+                IsConnected = false;
             });
         }
     }

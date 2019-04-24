@@ -58,7 +58,11 @@ namespace FlightSimulator.Model
             //split the textbox to a list of commands
             List<string> commands = Text_Changed.Split('\n').ToList<string>();
 
-            _client.SendToSimulator(commands);
+            ManualResetEvent commandsSent = new ManualResetEvent(false);
+        
+            _client.SendToSimulator(commands,commandsSent);
+
+            commandsSent.WaitOne();
             //set the commands to the client
             //_client.SetCommands(commands);
 

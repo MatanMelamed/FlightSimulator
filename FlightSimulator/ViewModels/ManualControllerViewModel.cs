@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FlightSimulator.ViewModels {
     class ManualControllerViewModel {
@@ -47,9 +48,11 @@ namespace FlightSimulator.ViewModels {
 
         void SendCommandToClient(string commandName,double value) {
             string command = commandName + value.ToString();
+            List<string> lst = new List<string>();
+            lst.Add(command);
 
             if (m_client.IsConnected) {
-                m_client.SendToSimulator(null, command);
+                m_client.SendToSimulator(lst);
             }            
         }
     }
