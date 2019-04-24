@@ -17,7 +17,7 @@ namespace FlightSimulator.Model {
             get { return _lon; }
             set {
                 _lon = value;
-                NotifyPropertyChanged("Lon");
+                //NotifyPropertyChanged("Lon");
             }
         }
 

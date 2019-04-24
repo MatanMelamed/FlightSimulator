@@ -80,8 +80,7 @@ namespace FlightSimulator.ViewModels
         //clear textbox
         public void Clear_Commands()
         {
-            VM_Text_Changed = "";
-            _apm.Background_Changed = Brushes.Transparent;
+            _apm.ClearCommands();
         }
 
         //send the commands to the simulator in other thread
@@ -91,6 +90,7 @@ namespace FlightSimulator.ViewModels
             sendCommnads.Start();
 
         }
+
     }
 }
 

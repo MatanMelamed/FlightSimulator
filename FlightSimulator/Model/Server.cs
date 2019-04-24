@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FlightSimulator.ViewModels;
+using System.Windows;
 
 namespace FlightSimulator {
     class Server {
@@ -16,6 +17,12 @@ namespace FlightSimulator {
         private int _port;
         #endregion
 
+        #region Garbage Values 
+        private Point garbage_point;
+        private bool garbage_values;
+        private int counter;
+        
+        #endregion
         #region Tasks management members
         CancellationTokenSource _tokenSource;
         CancellationToken _taskToken;
@@ -40,6 +47,8 @@ namespace FlightSimulator {
                     m_Instance._taskToken = m_Instance._tokenSource.Token;
                     m_Instance.GotConnected = new AutoResetEvent(false);
                     m_Instance.HasConnection = false;
+                    m_Instance.garbage_values = false;
+                    m_Instance.counter = 0;
                 }
                 return m_Instance;
             }
@@ -92,8 +101,21 @@ namespace FlightSimulator {
 
                 //getting the lon and the lat
                 string[] values = dataReceived.Split(',');
-                flightBoardModel.Lon = Convert.ToDouble(values[0]);
-                flightBoardModel.Lat = Convert.ToDouble(values[1]);
+                if (garbage_values)
+                {
+                        flightBoardModel.Lon = Convert.ToDouble(values[0]);
+                        flightBoardModel.Lat = Convert.ToDouble(values[1]);
+                }
+                if (garbage_values == false)
+                {
+                    counter++;
+                    garbage_point.X = Convert.ToDouble(values[0]);
+                    garbage_point.Y = Convert.ToDouble(values[1]);
+                    if (counter == 2)
+                    {
+                        garbage_values = true;
+                    }
+                }
             }
             conslog("handle client finished");
         }

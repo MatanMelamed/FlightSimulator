@@ -64,5 +64,13 @@ namespace FlightSimulator.Model {
             Background_Changed = Brushes.Transparent;
 
         }
+
+        public void ClearCommands()
+        {
+            _command_text = "";
+            NotifyPropertyChanged("Text_Changed");
+            Background_Changed = Brushes.Transparent;
+            NotifyPropertyChanged("Background_Changed");
+        }
     }
 }
