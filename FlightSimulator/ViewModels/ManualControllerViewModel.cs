@@ -46,15 +46,14 @@ namespace FlightSimulator.ViewModels {
             }
         }
 
-        void SendCommandToClient(string commandName,double value) {
+        void SendCommandToClient(string commandName, double value) {
             string command = commandName + value.ToString();
             List<string> lst = new List<string>();
             lst.Add(command);
 
             if (m_client.IsConnected) {
-                m_client.SetManual();
-                m_client.SendToSimulator(lst);
-            }            
+                m_client.SendToSimulator(lst, false);
+            }
         }
     }
 }

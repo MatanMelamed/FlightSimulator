@@ -8,20 +8,15 @@ using System.Threading.Tasks;
 
 namespace FlightSimulator {
 
-    
-
     public class CommandPackage {
-        public List<string> commands { get; set; }
-        public ManualResetEvent finishedEvent { get; set; }
+        public List<string> Commands { get; set; }
+        public ManualResetEvent FinishedEvent { get; set; }
+        public bool IsAuto { get; set; }
 
-        public CommandPackage(List<string> newCommands, ManualResetEvent newFinishedEvent = null) {
-            this.commands = newCommands;
-            if (newFinishedEvent == null) {
-                this.finishedEvent = new ManualResetEvent(false);
-            }
-            else {
-                this.finishedEvent = newFinishedEvent;
-            }
+        public CommandPackage(List<string> newCommands, bool isAuto) {
+            this.Commands = newCommands;
+            this.IsAuto = isAuto;
+            this.FinishedEvent = new ManualResetEvent(false);
         }
     }
 
@@ -39,9 +34,6 @@ namespace FlightSimulator {
         CancellationToken _taskToken;
         Task _startClientTask = null;
         Task _stopClientTask = null;
-        int AutoOrManuel;
-        const int MANUAL_VAL = 2;
-        const int AUTO_VAL = 1;
         #endregion
 
         #region Client job members
@@ -80,31 +72,12 @@ namespace FlightSimulator {
          * Add command or commands to send to the simulator
          * In case of both valid input, insert list first and then single command.
          * */
-        //public void SendToSimulator(List<string> newCommands, string newCommand = null) {
+        public void SendToSimulator(List<string> newCommands, bool isAuto, ManualResetEvent newFinishedEvent = null) {
 
-        //    if (newCommands != null) {
-        //        foreach (string command in newCommands) {
-        //            commands.Enqueue(newCommand);
-        //        }
-        //    }
-
-        //    if(newCommand != null) {
-        //        commands.Enqueue(newCommand);
-        //    }
-
-        //    // checks if the event is ready to be fired
-        //    // event can only get ready by main loop when main loop is sleeping
-        //    if (!GotCommands.WaitOne(0)) {
-        //        GotCommands.Set();
-        //    }
-        //}
-
-        public void SendToSimulator(List<string> newCommands, ManualResetEvent newFinishedEvent = null) {
-
-            CommandPackage newPackage = new CommandPackage(newCommands); ;
+            CommandPackage newPackage = new CommandPackage(newCommands, isAuto); ;
 
             if (newFinishedEvent != null) {
-                newPackage.finishedEvent = newFinishedEvent;
+                newPackage.FinishedEvent = newFinishedEvent;
             }
 
             commands.Enqueue(newPackage);
@@ -129,18 +102,17 @@ namespace FlightSimulator {
             while (!_taskToken.IsCancellationRequested) {
                 while (!commands.IsEmpty && !_taskToken.IsCancellationRequested) {
                     commands.TryDequeue(out package);
-                    foreach (string commmand in package.commands) {
+                    foreach (string commmand in package.Commands) {
                         byte[] buffer = encoding.GetBytes(commmand + "\r\n");
                         networkStream.Write(buffer, 0, buffer.Length);
-                        if (AutoOrManuel == AUTO_VAL)
-                        {
-                            networkStream.Flush();
+                        networkStream.Flush();
+                        if (package.IsAuto) {
                             Thread.Sleep(2000); //wait 2 seconds each command
                         }
                     }
 
-                    if(package.finishedEvent != null) {
-                        package.finishedEvent.Set();
+                    if (package.FinishedEvent != null) {
+                        package.FinishedEvent.Set();
                     }
                 }
                 GotCommands.Reset();
@@ -188,14 +160,5 @@ namespace FlightSimulator {
                 IsConnected = false;
             });
         }
-        public void SetAuto()
-        {
-            AutoOrManuel = AUTO_VAL;
-        }
-        public void SetManual()
-        {
-            AutoOrManuel = MANUAL_VAL;
-        }
     }
-    
 }

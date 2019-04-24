@@ -8,60 +8,49 @@ using System.Windows.Media;
 using System.Threading;
 using FlightSimulator.ViewModels;
 
-namespace FlightSimulator.Model
-{
-    public class AutoPilotModel : ModelNotify
-    {
+namespace FlightSimulator.Model {
+    public class AutoPilotModel : ModelNotify {
         string _command_text;
         volatile Brush _command_background;
         Client _client;
-        public AutoPilotModel()
-        {
-                _client = Client.Instance;
+        public AutoPilotModel() {
+            _client = Client.Instance;
         }
         //Properties
 
         //TextBox text property
-        public string Text_Changed
-        {
-            get
-            {
+        public string Text_Changed {
+            get {
                 return _command_text;
             }
-            set
-            {
-                _command_text =value;
+            set {
+                _command_text = value;
                 //notify change
                 NotifyPropertyChanged("Text_Changed");
             }
         }
         //TextBox background property
-        public Brush Background_Changed
-        {
-            get
-            {
+        public Brush Background_Changed {
+            get {
                 return _command_background;
             }
-            set
-            {
+            set {
                 _command_background = value;
                 //notify change
                 NotifyPropertyChanged("Background_Changed");
             }
         }
         //send the commands to the simulator
-        public void Send_Commands()
-        {
-           
+        public void Send_Commands() {
+
             //change the backround to a busy color - Pink
             Background_Changed = Brushes.Pink;
             //split the textbox to a list of commands
             List<string> commands = Text_Changed.Split('\n').ToList<string>();
 
             ManualResetEvent commandsSent = new ManualResetEvent(false);
-        
-            _client.SendToSimulator(commands,commandsSent);
-            _client.SetAuto();
+
+            _client.SendToSimulator(commands, true, commandsSent);
 
             commandsSent.WaitOne();
             //set the commands to the client
