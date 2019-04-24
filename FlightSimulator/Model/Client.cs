@@ -128,9 +128,9 @@ namespace FlightSimulator {
 
             _startClientTask = Task.Run(() => {
                 // Check if the server has already a connection, else sleep until event happen
-                //if (!Server.Instance.HasConnection) {
-                //    Server.Instance.GotConnected.WaitOne();
-                //}
+                if (!Server.Instance.HasConnection) {
+                    Server.Instance.GotConnected.WaitOne();
+                }
 
                 // check if disconnect thread is running, and wait for it to finish before continuing
                 if (_stopClientTask != null) {

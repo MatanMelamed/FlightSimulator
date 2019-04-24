@@ -39,12 +39,12 @@ namespace FlightSimulator.Model {
 
         //connect simulator by Server-Client methodology
         public void ConnectSimulator() {
-            
-            //Server server = Server.Instance;
-            //if (server.HasConnection) {
-            //    server.Stop();
-            //}
-            //server.Start();
+
+            Server server = Server.Instance;
+            if (server.HasConnection) {
+                server.Stop();
+            }
+            server.Start();
 
             Client client = Client.Instance;
             if (client.IsConnected) {
