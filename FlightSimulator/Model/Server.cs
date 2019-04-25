@@ -18,9 +18,9 @@ namespace FlightSimulator {
         #endregion
 
         #region Garbage Values 
-        private Point garbage_point;
+        const int NUMBER_GARBAGE_VAL = 2;
         private bool garbage_values;
-        private int counter;
+        private int counter_gVal;
         
         #endregion
         #region Tasks management members
@@ -48,7 +48,7 @@ namespace FlightSimulator {
                     m_Instance.GotConnected = new AutoResetEvent(false);
                     m_Instance.HasConnection = false;
                     m_Instance.garbage_values = false;
-                    m_Instance.counter = 0;
+                    m_Instance.counter_gVal = 0;
                 }
                 return m_Instance;
             }
@@ -108,10 +108,8 @@ namespace FlightSimulator {
                 }
                 if (garbage_values == false)
                 {
-                    counter++;
-                    garbage_point.X = Convert.ToDouble(values[0]);
-                    garbage_point.Y = Convert.ToDouble(values[1]);
-                    if (counter == 2)
+                    counter_gVal++;
+                    if (counter_gVal == NUMBER_GARBAGE_VAL)
                     {
                         garbage_values = true;
                     }
