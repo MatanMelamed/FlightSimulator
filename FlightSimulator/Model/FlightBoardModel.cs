@@ -55,7 +55,7 @@ namespace FlightSimulator.Model {
         }
 
         public void DisconnectSimulator() {
-            System.Console.WriteLine("disconnecting");
+            //System.Console.WriteLine("disconnecting");
             Task.Run(() => {
                 Task stopServer = Server.Instance.Stop();
                 if(stopServer != null) {
@@ -66,7 +66,7 @@ namespace FlightSimulator.Model {
                     stopClient.Wait();
                 }
 
-                System.Console.WriteLine("disconnected");
+                //System.Console.WriteLine("disconnected");
             });
         }
     }

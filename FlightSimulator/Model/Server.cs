@@ -21,8 +21,8 @@ namespace FlightSimulator {
         const int NUMBER_GARBAGE_VAL = 2;
         private bool garbage_values;
         private int counter_gVal;
-        
         #endregion
+
         #region Tasks management members
         CancellationTokenSource _tokenSource;
         CancellationToken _taskToken;
@@ -70,16 +70,16 @@ namespace FlightSimulator {
             _listener.Start();
 
             //wait till we have a connection
-            conslog("waiting for clients");
+            //conslog("waiting for clients");
             while (!_listener.Pending()) {
                 if (_taskToken.IsCancellationRequested) {
-                    conslog("start task got cancel while waiting for clients");
+                    //conslog("start task got cancel while waiting for clients");
                     return null;
                 }
                 Thread.Sleep(500); // choose a number (in milliseconds) that makes sense
             }
             TcpClient tcpClient = _listener.AcceptTcpClient();
-            conslog("start task got client");
+            //conslog("start task got client");
             GotConnected.Set();
             HasConnection = true;
             return tcpClient;
@@ -97,7 +97,7 @@ namespace FlightSimulator {
 
                 //---convert the data received into a string---
                 string dataReceived = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                Console.WriteLine("Received : " + dataReceived);
+                //Console.WriteLine("Received : " + dataReceived);
 
                 //getting the lon and the lat
                 string[] values = dataReceived.Split(',');
@@ -115,21 +115,21 @@ namespace FlightSimulator {
                     }
                 }
             }
-            conslog("handle client finished");
+            //conslog("handle client finished");
         }
 
         // Start the server in a new task thread.
         public void Start() {
-            conslog("start task called");
+           // conslog("start task called");
             if (_startServerTask != null && _startServerTask.Status == TaskStatus.Running) {
                 return;
             }
 
             _startServerTask = Task.Run(() => {
                 if (_stopServerTask != null) {
-                    conslog("waiting for stop task");
+                    //conslog("waiting for stop task");
                     _stopServerTask.Wait();
-                    conslog("finished waiting for stop task");
+                    //conslog("finished waiting for stop task");
                 }
 
                 UpdateConnectionInfo();
@@ -146,23 +146,23 @@ namespace FlightSimulator {
         }
         // Stop the server in a new task thread.
         public Task Stop() {
-            conslog("stop called.");
+            //conslog("stop called.");
             if (_startServerTask == null || _startServerTask.Status != TaskStatus.Running) {
                 return null;
             }
 
             _stopServerTask = Task.Run(() => {
-                conslog("canceling token");
+                //conslog("canceling token");
                 _tokenSource.Cancel();
-                conslog("waiting for start task to end");
+                //conslog("waiting for start task to end");
                 _startServerTask.Wait();
-                conslog("finished waiting for start task");
+                //conslog("finished waiting for start task");
                 _tokenSource.Dispose();
                 _tokenSource = new CancellationTokenSource();
                 _taskToken = _tokenSource.Token;
                 _listener.Stop();
                 HasConnection = false;
-                conslog("finished stop task");
+                //conslog("finished stop task");
             });
             return _stopServerTask;
         }
