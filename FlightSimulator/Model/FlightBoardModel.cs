@@ -21,11 +21,11 @@ namespace FlightSimulator.Model {
             }
         }
 
-        private double _lat = 0;
+        private double lat = 0;
         public double Lat {
-            get { return _lat; }
+            get { return lat; }
             set {
-                _lat = value;
+                lat = value;
                 NotifyPropertyChanged("Lat");   //Notify change to the viewmodel
             }
         }

@@ -105,7 +105,6 @@ namespace FlightSimulator {
 
             while (!_taskToken.IsCancellationRequested) {
                 while (!commands.IsEmpty && !_taskToken.IsCancellationRequested) {
-                    //conslog("main loop :: doing command package");
                     commands.TryDequeue(out package);
                     foreach (string commmand in package.Commands) {
                         byte[] buffer = encoding.GetBytes(commmand + "\r\n");
@@ -121,10 +120,8 @@ namespace FlightSimulator {
                     }
                 }
                 if (!_taskToken.IsCancellationRequested) {
-                    //conslog("main loop :: entering sleep");
                     GotCommands.Reset();
                     GotCommands.WaitOne();
-                   // conslog("main loop :: woke up");
                 }
             }
         }
@@ -134,7 +131,6 @@ namespace FlightSimulator {
         }
         //Connect to the simulator
         public void Connect() {
-            //conslog("connect called.");
             if (_startClientTask != null && _startClientTask.Status == TaskStatus.Running) {
                 return;
             }
@@ -142,23 +138,18 @@ namespace FlightSimulator {
             _startClientTask = Task.Run(() => {
                 //Check if the server has already a connection, else sleep until event happen
                 if (!Server.Instance.HasConnection) {
-                    //conslog("start task :: servers down, entering sleep");
                     WaitHandle[] canWakeUpThreadEvents = new WaitHandle[] {
                         Server.Instance.GotConnected,
                         DisconnectCalled
                     };
                     if (WaitHandle.WaitAny(canWakeUpThreadEvents) == 1) {
-                        //conslog("start task :: woke up by disconnect");
                         return;
                     }
-                    //conslog("start task :: woke up by server");
                 }
 
                 // check if disconnect thread is running, and wait for it to finish before continuing
                 if (_stopClientTask != null) {
-                   //conslog("start task :: waiting for client stop task");
                     _stopClientTask.Wait();
-                    //conslog("start task :: finished waiting for client stop task");
                 }
 
                 ConnectToTarget();
@@ -167,28 +158,22 @@ namespace FlightSimulator {
         }
 
         public Task Disconnect() {
-            //conslog("disconnect task :: disconnect called.");
             if (_startClientTask == null || _startClientTask.Status != TaskStatus.Running) {
                 return null;
             }
 
             _stopClientTask = Task.Run(() => {
-                //conslog("disconnect task :: canceling token");
                 _tokenSource.Cancel();
                 // if main loop is waiting for event, set it on to wake it up
                 DisconnectCalled.Set();
                 if (!GotCommands.WaitOne(0)) {
-                    //conslog("disconnect task :: fire got commands event");
                     GotCommands.Set();
                 }
-                //conslog("disconnect task :: waiting for start task to finish");
                 _startClientTask.Wait();
-                //conslog("disconnect task :: finished waiting for start task");
                 _tokenSource.Dispose();
                 _tokenSource = new CancellationTokenSource();
                 _taskToken = _tokenSource.Token;
                 IsConnected = false;
-                //conslog("finished disconnect task");
             });
             return _stopClientTask;
         }

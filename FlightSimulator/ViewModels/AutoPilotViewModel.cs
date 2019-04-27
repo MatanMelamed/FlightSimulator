@@ -14,14 +14,14 @@ namespace FlightSimulator.ViewModels
 {
     class AutoPilotViewModel : BaseNotify
     {
-        private AutoPilotModel _apm;
+        private AutoPilotModel autoPilotModel;
         public CommandHandler _clearCommand;
         public CommandHandler _sendCommands;
         public AutoPilotViewModel()
         { 
-            _apm = new AutoPilotModel();
+            autoPilotModel = new AutoPilotModel();
             //Notify the fit property in the view model
-            _apm.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
+            autoPilotModel.PropertyChanged += delegate (Object sender, PropertyChangedEventArgs e)
             {
                 NotifyPropertyChanged("VM_" + e.PropertyName);
             };
@@ -54,11 +54,11 @@ namespace FlightSimulator.ViewModels
         {
             get
             {
-                return _apm.Text_Changed;
+                return autoPilotModel.Text_Changed;
             }
             set
             {
-                _apm.Text_Changed = value;
+                autoPilotModel.Text_Changed = value;
                 //notify change
                 NotifyPropertyChanged("VM_Text_Changed");
             }
@@ -68,11 +68,11 @@ namespace FlightSimulator.ViewModels
         {
             get
             {
-                return _apm.Background_Changed;
+                return autoPilotModel.Background_Changed;
             }
             set
             {
-                _apm.Background_Changed = value;
+                autoPilotModel.Background_Changed = value;
                 //notify change
                 NotifyPropertyChanged("VM_Background_Changed");
             }
@@ -80,16 +80,14 @@ namespace FlightSimulator.ViewModels
         //clear textbox
         public void Clear_Commands()
         {
-            _apm.ClearCommands();
+            autoPilotModel.ClearCommands();
         }
 
         //send the commands to the simulator in other thread
         public void Send_Commands()
         {
-            Thread sendCommnads= new Thread(_apm.Send_Commands);
+            Thread sendCommnads= new Thread(autoPilotModel.Send_Commands);
             sendCommnads.Start();
-
         }
-
     }
 }
